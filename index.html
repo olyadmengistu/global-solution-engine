@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Solution Engine - Solve Problems Together</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Header with 3D Logo -->
+    <header class="header">
+        <div class="logo-container">
+            <div class="logo-3d">GSE</div>
+            <h1>Global Solution Engine</h1>
+        </div>
+        <p class="tagline">Where the world solves problems together</p>
+        <div class="user-section">
+            <input type="text" id="userName" placeholder="Your name (optional)" class="user-input">
+            <div id="userStats" class="user-stats" style="display: none;">
+                <span id="problemsPosted">0</span> problems posted
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Problem Input Section -->
+        <section class="problem-input-section">
+            <div class="glass-card">
+                <h2>What problem can we solve together?</h2>
+                <textarea id="problemInput" placeholder="Describe your problem here... (e.g., 'My elderly grandmother feels lonely living alone')" rows="4"></textarea>
+                <button id="submitProblem" class="glow-button">Submit to the World</button>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Connecting to the Global Brain...</p>
+        </div>
+
+        <!-- Problems Display Section -->
+        <section class="problems-section">
+            <h2>Recent Problems from the Community</h2>
+            <div id="problemsContainer" class="problems-grid">
+                <!-- Problems will load here automatically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Join the movement - Help others and get help for free</p>
+        <p class="stats" id="globalStats">Loading global stats...</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
