@@ -3,786 +3,719 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindHive | Collective Intelligence Platform</title>
+    <title>NexusMind | Global Collective Intelligence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* Loading overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 8, 17, 0.95);
+            backdrop-filter: blur(10px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        
+        .ai-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4aa, #08f7fe);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .ai-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .ai-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #00ff9d;
+            animation: pulseLive 2s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        
+        .ai-panel {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(10, 14, 23, 0.95));
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            display: none;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 212, 170, 0.7);
+        }
+        
+        .ai-panel.show {
+            display: block;
+            animation: quantumEntrance 0.3s ease-out;
+        }
+        
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .ai-header h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #00d4aa;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .ai-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        
+        .ai-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ff2e63;
+        }
+        
+        .ai-chat {
+            height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .ai-message {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 85%;
+        }
+        
+        .ai-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .ai-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4aa, #08f7fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: #0a0e17;
+            flex-shrink: 0;
+        }
+        
+        .message-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .ai-message.user .message-content {
+            background: rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+        }
+        
+        .ai-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 0.5rem;
+        }
+        
+        .ai-input input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 10px;
+            padding: 0.75rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .ai-input input:focus {
+            outline: none;
+            border-color: #00d4aa;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.7);
+        }
+        
+        .ai-input button {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #00d4aa, #08f7fe);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-input button:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
-    <!-- Background Elements -->
-    <div class="bg-gradient"></div>
-    <div class="floating-dots"></div>
-    <div class="floating-shapes"></div>
+    <!-- Animated Background Canvas -->
+    <div id="particles-js"></div>
+    <div class="energy-grid"></div>
+    <div class="neural-connections"></div>
     
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-content">
-            <div class="loading-logo">
-                <i class="fas fa-brain"></i>
-            </div>
-            <div class="loading-text">
-                <h3>MindHive</h3>
-                <p>Connecting global intelligence...</p>
-            </div>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="quantum-loader">
+            <div class="pulsar-core" style="width: 80px; height: 80px;"></div>
+            <div class="orbit-ring r1" style="width: 100px; height: 100px;"></div>
+            <div class="orbit-ring r2" style="width: 120px; height: 120px;"></div>
+            <div class="orbit-ring r3" style="width: 140px; height: 140px;"></div>
+            <p style="margin-top: 2rem; color: #00d4aa; font-family: 'Orbitron', sans-serif;">Connecting to Neural Network...</p>
         </div>
     </div>
-    
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href="#" class="logo">
-                    <i class="fas fa-brain"></i>
-                    <span>MindHive</span>
-                    <span class="beta-badge">BETA</span>
-                </a>
-                <div class="nav-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search challenges..." id="searchInput">
-                </div>
-            </div>
-            <div class="nav-menu">
-                <a href="#" class="nav-item active" data-section="home">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="#" class="nav-item" data-section="problems">
-                    <i class="fas fa-comments"></i>
-                    <span>Challenges</span>
-                    <span class="nav-badge" id="problemsBadge">0</span>
-                </a>
-                <a href="#" class="nav-item" data-section="solutions">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>Solutions</span>
-                </a>
-                <a href="#" class="nav-item" data-section="leaders">
-                    <i class="fas fa-trophy"></i>
-                    <span>Leaders</span>
-                </a>
-            </div>
-            <div class="nav-user">
-                <div class="notification-bell" id="notificationBell">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-count" id="notificationCount">0</span>
-                </div>
-                <input type="text" class="user-input" id="userName" placeholder="Your name" value="MindHiver">
-                <div class="user-avatar" id="userAvatar">
-                    <div class="avatar-initial">M</div>
-                    <div class="avatar-status online"></div>
-                </div>
-                <div class="user-menu">
-                    <div class="menu-item">
-                        <i class="fas fa-user"></i>
-                        <span>Profile</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-bookmark"></i>
-                        <span>Bookmarks</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </div>
-                    <div class="menu-divider"></div>
-                    <div class="menu-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Sign Out</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-background"></div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-rocket"></i>
-                    <span>LIVE BETA</span>
+    <!-- Main Container -->
+    <div class="universe-container">
+        
+        <!-- Cosmic Navigation -->
+        <nav class="cosmic-nav">
+            <div class="nav-orbits">
+                <div class="logo-nebula">
+                    <div class="pulsar-core"></div>
+                    <div class="orbit-ring r1"></div>
+                    <div class="orbit-ring r2"></div>
+                    <div class="orbit-ring r3"></div>
+                    <span class="logo-text">NEXUS<span class="logo-glow">MIND</span></span>
                 </div>
+                
+                <div class="nav-portals">
+                    <a href="#" class="portal active" onclick="showHome()">
+                        <i class="fas fa-home"></i>
+                        <span class="portal-label">Home</span>
+                    </a>
+                    <a href="#" class="portal" onclick="showProblems()">
+                        <i class="fas fa-brain"></i>
+                        <span class="portal-label">Problems</span>
+                    </a>
+                    <a href="#" class="portal" onclick="showSolutions()">
+                        <i class="fas fa-star"></i>
+                        <span class="portal-label">Solutions</span>
+                    </a>
+                    <a href="#" class="portal" onclick="showLeaderboard()">
+                        <i class="fas fa-crown"></i>
+                        <span class="portal-label">Leaders</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="user-quantum">
+                <div class="quantum-avatar" id="quantumAvatar">
+                    <div class="avatar-halo"></div>
+                    <div class="avatar-core"></div>
+                </div>
+                <input type="text" 
+                       id="userName" 
+                       class="neon-input" 
+                       placeholder="Enter your name..."
+                       maxlength="20">
+                <div class="user-stats-hologram">
+                    <div class="stat-node">
+                        <div class="stat-value" id="userProblems">0</div>
+                        <div class="stat-label">Problems</div>
+                    </div>
+                    <div class="stat-node">
+                        <div class="stat-value" id="userSolutions">0</div>
+                        <div class="stat-label">Solutions</div>
+                    </div>
+                    <div class="stat-node">
+                        <div class="stat-value" id="userRank">∞</div>
+                        <div class="stat-label">Rank</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Universe -->
+        <main class="quantum-main">
+            
+            <!-- Hero Singularity -->
+            <section class="singularity-hero">
                 <h1 class="hero-title">
-                    <span class="gradient-text">Collective Intelligence</span>
-                    <br>For Humanity's Greatest Challenges
+                    <span class="title-particle">Where</span>
+                    <span class="title-particle">Humanity's</span>
+                    <span class="title-particle">Intelligence</span>
+                    <span class="title-particle">Converges</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Present any problem. The global mind finds elegant solutions.
-                    <span class="highlight">Join 12,459+ minds solving together.</span>
+                    Post any problem. Watch the global neural network solve it in real-time.
+                    <span class="subtitle-glow">Free. Forever.</span>
                 </p>
                 
-                <div class="hero-actions">
-                    <button class="btn-primary btn-hero" id="startSolving">
-                        <i class="fas fa-play"></i>
-                        <span>Start Solving Now</span>
-                    </button>
-                    <button class="btn-secondary btn-hero" id="watchDemo">
-                        <i class="fas fa-play-circle"></i>
-                        <span>Watch Demo</span>
-                    </button>
-                </div>
-                
-                <div class="hero-stats">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="totalProblems">0</div>
-                            <div class="stat-label">Active Challenges</div>
-                        </div>
+                <div class="live-stats">
+                    <div class="live-stat">
+                        <div class="live-value" id="liveProblems">2,847</div>
+                        <div class="live-label">Active Problems</div>
+                        <div class="live-pulse"></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="totalMinds">0</div>
-                            <div class="stat-label">Active Minds</div>
-                        </div>
+                    <div class="live-stat">
+                        <div class="live-value" id="liveSolvers">12,459</div>
+                        <div class="live-label">Active Minds</div>
+                        <div class="live-pulse"></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="totalSolutions">0</div>
-                            <div class="stat-label">Solutions Found</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-value" id="successRate">92%</div>
-                            <div class="stat-label">Success Rate</div>
-                        </div>
+                    <div class="live-stat">
+                        <div class="live-value" id="liveSolutions">45,231</div>
+                        <div class="live-label">Solutions Generated</div>
+                        <div class="live-pulse"></div>
                     </div>
                 </div>
-                
-                <div class="hero-scroll">
-                    <div class="scroll-indicator">
-                        <div class="scroll-line"></div>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <span>Explore Challenges</span>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <div class="container">
-            <div class="content-grid">
-                <!-- Left Sidebar -->
-                <aside class="sidebar-left">
-                    <!-- Quick Submit -->
-                    <div class="card submit-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-pen-nib"></i> Present Challenge</h3>
-                            <div class="card-badge pulse">New</div>
+            <!-- Problem Submission Portal -->
+            <section class="submission-portal">
+                <div class="portal-frame">
+                    <div class="portal-header">
+                        <div class="portal-title">
+                            <i class="fas fa-broadcast-tower portal-icon"></i>
+                            <h2>Broadcast Your Challenge</h2>
                         </div>
-                        <div class="card-body">
-                            <div class="category-selector">
-                                <div class="category active" data-category="all">
-                                    <div class="category-icon">
-                                        <i class="fas fa-globe"></i>
+                        <div class="portal-controls">
+                            <div class="quantum-toggle">
+                                <span class="toggle-label">Public Post</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="portal-body">
+                        <div class="category-selector">
+                            <div class="category-pill active" onclick="selectCategory('all')">
+                                <i class="fas fa-globe"></i>
+                                <span>All Topics</span>
+                            </div>
+                            <div class="category-pill" onclick="selectCategory('tech')">
+                                <i class="fas fa-microchip"></i>
+                                <span>Technology</span>
+                            </div>
+                            <div class="category-pill" onclick="selectCategory('life')">
+                                <i class="fas fa-heart"></i>
+                                <span>Life</span>
+                            </div>
+                            <div class="category-pill" onclick="selectCategory('biz')">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Business</span>
+                            </div>
+                            <div class="category-pill" onclick="selectCategory('crea')">
+                                <i class="fas fa-palette"></i>
+                                <span>Creative</span>
+                            </div>
+                        </div>
+                        
+                        <div class="problem-input-holo">
+                            <textarea 
+                                id="problemInput" 
+                                class="holo-textarea" 
+                                placeholder="Describe your challenge... Example: 'How can I reduce electricity bills without expensive changes?'"
+                                rows="4"
+                                maxlength="500"></textarea>
+                            <div class="input-metrics">
+                                <div class="char-quantum">
+                                    <div class="quantum-bar">
+                                        <div class="quantum-fill" id="charFill"></div>
                                     </div>
-                                    <span>All Topics</span>
+                                    <span class="char-count" id="charCount">0/500</span>
                                 </div>
-                                <div class="category" data-category="technology">
-                                    <div class="category-icon">
-                                        <i class="fas fa-code"></i>
-                                    </div>
-                                    <span>Technology</span>
+                                <div class="input-tools">
+                                    <button class="tool-btn" onclick="addImage()">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <button class="tool-btn" onclick="formatText()">
+                                        <i class="fas fa-bold"></i>
+                                    </button>
+                                    <button class="tool-btn" onclick="aiEnhance()">
+                                        <i class="fas fa-robot"></i>
+                                    </button>
                                 </div>
-                                <div class="category" data-category="business">
-                                    <div class="category-icon">
-                                        <i class="fas fa-chart-line"></i>
-                                    </div>
-                                    <span>Business</span>
+                            </div>
+                        </div>
+                        
+                        <button id="submitProblem" class="quantum-button" onclick="submitProblem()">
+                            <div class="button-energy"></div>
+                            <i class="fas fa-satellite"></i>
+                            <span>Submit to Global Network</span>
+                            <div class="button-ripple"></div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Problems Matrix -->
+            <section class="matrix-grid">
+                <div class="matrix-header">
+                    <h3 class="matrix-title">
+                        <i class="fas fa-network-wired"></i>
+                        Live Problem Feed
+                        <span class="title-badge">ACTIVE NOW</span>
+                    </h3>
+                    <div class="matrix-filters">
+                        <div class="filter-group">
+                            <span class="filter-label">Sort by:</span>
+                            <select class="neon-select" id="sortSelect" onchange="sortProblems()">
+                                <option value="recent">Most Recent</option>
+                                <option value="popular">Most Popular</option>
+                                <option value="solutions">Most Solutions</option>
+                                <option value="urgent">Most Urgent</option>
+                            </select>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-option active" onclick="setGridView()"><i class="fas fa-th-large"></i></button>
+                            <button class="view-option" onclick="setListView()"><i class="fas fa-list"></i></button>
+                            <button class="view-option" onclick="toggleFullscreen()"><i class="fas fa-expand"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="problemsContainer" class="quantum-grid">
+                    <!-- Problems will load here -->
+                </div>
+                
+                <div class="matrix-footer">
+                    <button id="loadMore" class="load-more-quantum" onclick="loadMoreProblems()">
+                        <span>Load More Problems</span>
+                        <div class="load-ripple"></div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Quantum Dashboard -->
+            <section class="quantum-dashboard">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-fire"></i> Trending Solutions</h4>
+                        <div class="time-filter" onclick="changeTrendingTime()">Today</div>
+                    </div>
+                    <div id="trendingSolutions" class="trending-stream">
+                        <!-- Trending solutions will load here -->
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-bolt"></i> Live Activity</h4>
+                        <div class="activity-pulse active"></div>
+                    </div>
+                    <div class="activity-feed" id="activityFeed">
+                        <!-- Activity feed will load here -->
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-chart-line"></i> Live Analytics</h4>
+                        <div class="analytics-badge">LIVE</div>
+                    </div>
+                    <div class="features-list">
+                        <div class="feature-item live">
+                            <div class="feature-icon">
+                                <i class="fas fa-fire"></i>
+                                <div class="icon-aura"></div>
+                            </div>
+                            <div class="feature-info">
+                                <h5>Most Active Category</h5>
+                                <p id="activeCategory">Technology • 42 problems</p>
+                            </div>
+                        </div>
+                        <div class="feature-item live">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                                <div class="icon-aura"></div>
+                            </div>
+                            <div class="feature-info">
+                                <h5>Fastest Solutions</h5>
+                                <p id="fastestSolve">Solved in 2.3 minutes avg</p>
+                            </div>
+                        </div>
+                        <div class="feature-item live">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                                <div class="icon-aura"></div>
+                            </div>
+                            <div class="feature-info">
+                                <h5>Top Contributor</h5>
+                                <p id="topContributor">QuantumSolver • 24 solutions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Solution Quantum Modal -->
+        <div id="solutionModal" class="quantum-modal">
+            <div class="modal-universe">
+                <div class="modal-wormhole">
+                    <div class="modal-event-horizon">
+                        <button class="modal-close" onclick="closeModal()">
+                            <i class="fas fa-times"></i>
+                            <div class="close-ripple"></div>
+                        </button>
+                        
+                        <div class="problem-singularity">
+                            <div class="singularity-header">
+                                <div class="problem-quantum">
+                                    <div class="quantum-tag">ACTIVE</div>
+                                    <h2 id="modalProblemTitle">Problem Details</h2>
                                 </div>
-                                <div class="category" data-category="science">
-                                    <div class="category-icon">
-                                        <i class="fas fa-flask"></i>
+                                <div class="singularity-metrics">
+                                    <div class="metric">
+                                        <i class="fas fa-brain"></i>
+                                        <span id="solversCount">0</span>
                                     </div>
-                                    <span>Science</span>
-                                </div>
-                                <div class="category" data-category="social">
-                                    <div class="category-icon">
-                                        <i class="fas fa-users"></i>
+                                    <div class="metric">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <span id="solutionsCount">0</span>
                                     </div>
-                                    <span>Social</span>
-                                </div>
-                                <div class="category" data-category="environment">
-                                    <div class="category-icon">
-                                        <i class="fas fa-leaf"></i>
+                                    <div class="metric">
+                                        <i class="fas fa-bolt"></i>
+                                        <span id="energyLevel">0</span>
                                     </div>
-                                    <span>Environment</span>
                                 </div>
                             </div>
                             
-                            <div class="problem-input-wrapper">
+                            <div class="singularity-body">
+                                <p id="modalProblemText">Loading problem details...</p>
+                                <div class="singularity-meta">
+                                    <div class="meta-avatar" id="problemAvatar"></div>
+                                    <div class="meta-info">
+                                        <div class="meta-name" id="problemAuthor">Loading...</div>
+                                        <div class="meta-time" id="problemTime">Just now</div>
+                                    </div>
+                                    <div class="meta-actions">
+                                        <button class="action-btn" onclick="shareProblem()">
+                                            <i class="fas fa-share"></i>
+                                            <span>Share</span>
+                                        </button>
+                                        <button class="action-btn" onclick="bookmarkProblem()">
+                                            <i class="fas fa-bookmark"></i>
+                                            <span>Save</span>
+                                        </button>
+                                        <button class="action-btn" onclick="followProblem()">
+                                            <i class="fas fa-bell"></i>
+                                            <span>Follow</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="solutions-nebula">
+                            <div class="nebula-header">
+                                <h3>
+                                    <i class="fas fa-star"></i>
+                                    Community Solutions
+                                    <span class="nebula-badge" id="totalSolutionsBadge">0</span>
+                                </h3>
+                                <div class="nebula-sort">
+                                    <span>Sort by:</span>
+                                    <select class="nebula-select" id="solutionSort" onchange="sortSolutions()">
+                                        <option value="popular">Most Popular</option>
+                                        <option value="recent">Most Recent</option>
+                                        <option value="helpful">Most Helpful</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div id="solutionsList" class="solutions-orbit">
+                                <!-- Solutions will load here -->
+                            </div>
+                            
+                            <div class="solution-input-portal">
+                                <div class="portal-header">
+                                    <h4><i class="fas fa-plus-circle"></i> Add Your Solution</h4>
+                                    <div class="portal-hint">Your wisdom shapes reality</div>
+                                </div>
                                 <textarea 
-                                    id="problemInput" 
-                                    class="problem-input" 
-                                    placeholder="Describe your challenge... What problem are you trying to solve?"
-                                    rows="5"
-                                    maxlength="500"></textarea>
-                                <div class="input-tools">
-                                    <button class="tool-btn" title="Format text">
-                                        <i class="fas fa-bold"></i>
-                                    </button>
-                                    <button class="tool-btn" title="Add link">
-                                        <i class="fas fa-link"></i>
-                                    </button>
-                                    <button class="tool-btn" title="Add code">
-                                        <i class="fas fa-code"></i>
-                                    </button>
-                                </div>
-                                <div class="input-footer">
-                                    <span class="char-count" id="charCount">0/500</span>
-                                    <button class="btn-submit" id="submitProblem">
+                                    id="solutionInput" 
+                                    class="portal-textarea"
+                                    placeholder="Share your insight... Be specific and helpful!"
+                                    rows="3"></textarea>
+                                <div class="portal-actions">
+                                    <div class="solution-tools">
+                                        <button class="tool-btn" onclick="addCode()"><i class="fas fa-code"></i></button>
+                                        <button class="tool-btn" onclick="addLink()"><i class="fas fa-link"></i></button>
+                                        <button class="tool-btn" onclick="aiHelp()"><i class="fas fa-magic"></i></button>
+                                    </div>
+                                    <button id="submitSolution" class="portal-submit" onclick="submitSolution()">
                                         <i class="fas fa-paper-plane"></i>
-                                        <span>Submit to Hive</span>
+                                        <span>Post Solution</span>
+                                        <div class="submit-glow"></div>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Quick Stats -->
-                    <div class="card stats-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-chart-bar"></i> Hive Insights</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="insight-grid">
-                                <div class="insight-item">
-                                    <div class="insight-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
-                                        <i class="fas fa-bolt"></i>
-                                    </div>
-                                    <div class="insight-content">
-                                        <div class="insight-title">Fastest Solve</div>
-                                        <div class="insight-value">18 min</div>
-                                    </div>
-                                </div>
-                                <div class="insight-item">
-                                    <div class="insight-icon" style="background: linear-gradient(135deg, #06b6d4, #10b981);">
-                                        <i class="fas fa-fire"></i>
-                                    </div>
-                                    <div class="insight-content">
-                                        <div class="insight-title">Hot Topic</div>
-                                        <div class="insight-value">AI Ethics</div>
-                                    </div>
-                                </div>
-                                <div class="insight-item">
-                                    <div class="insight-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
-                                        <i class="fas fa-crown"></i>
-                                    </div>
-                                    <div class="insight-content">
-                                        <div class="insight-title">Top Solver</div>
-                                        <div class="insight-value">Alex Chen</div>
-                                    </div>
-                                </div>
-                                <div class="insight-item">
-                                    <div class="insight-icon" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <div class="insight-content">
-                                        <div class="insight-title">Avg. Rating</div>
-                                        <div class="insight-value">4.8/5</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Solvers -->
-                    <div class="card solvers-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-users"></i> Recent Solvers</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="solvers-list" id="recentSolvers">
-                                <!-- Dynamic content -->
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-
-                <!-- Main Content Area -->
-                <div class="content-center">
-                    <!-- Challenges Header -->
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fas fa-comments"></i>
-                            <h2>Recent Challenges</h2>
-                            <div class="section-badge" id="challengesCount">0</div>
-                        </div>
-                        <div class="section-controls">
-                            <div class="view-toggle">
-                                <button class="view-btn active" data-view="grid">
-                                    <i class="fas fa-th-large"></i>
-                                </button>
-                                <button class="view-btn" data-view="list">
-                                    <i class="fas fa-list"></i>
-                                </button>
-                            </div>
-                            <div class="filter-group">
-                                <select class="filter-select" id="sortSelect">
-                                    <option value="newest">Newest First</option>
-                                    <option value="popular">Most Popular</option>
-                                    <option value="solved">Recently Solved</option>
-                                    <option value="trending">Trending</option>
-                                </select>
-                                <select class="filter-select" id="filterSelect">
-                                    <option value="all">All Categories</option>
-                                    <option value="technology">Technology</option>
-                                    <option value="business">Business</option>
-                                    <option value="science">Science</option>
-                                    <option value="social">Social</option>
-                                    <option value="environment">Environment</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Challenges Grid -->
-                    <div id="problemsContainer" class="problems-grid">
-                        <!-- Challenges will load here -->
-                    </div>
-
-                    <!-- Loading Spinner -->
-                    <div class="loading-spinner" id="loadingSpinner">
-                        <div class="spinner"></div>
-                        <p>Loading more challenges...</p>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div class="empty-state" id="emptyState">
-                        <div class="empty-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <h3>No challenges yet</h3>
-                        <p>Be the first to present a challenge to the hive mind!</p>
-                        <button class="btn-primary" onclick="document.getElementById('problemInput').focus()">
-                            <i class="fas fa-plus"></i>
-                            Create First Challenge
-                        </button>
-                    </div>
-
-                    <!-- Trending Solutions -->
-                    <div class="card trending-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-fire"></i> Trending Solutions</h3>
-                            <div class="card-badge">Hot</div>
-                        </div>
-                        <div id="trendingSolutions" class="trending-list">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
-
-                    <!-- How It Works -->
-                    <div class="card guide-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-info-circle"></i> How MindHive Works</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="steps">
-                                <div class="step">
-                                    <div class="step-number">1</div>
-                                    <div class="step-content">
-                                        <h4>Present Challenge</h4>
-                                        <p>Describe your problem clearly and in detail</p>
-                                    </div>
-                                </div>
-                                <div class="step">
-                                    <div class="step-number">2</div>
-                                    <div class="step-content">
-                                        <h4>Global Minds Engage</h4>
-                                        <p>Experts from around the world analyze and discuss</p>
-                                    </div>
-                                </div>
-                                <div class="step">
-                                    <div class="step-number">3</div>
-                                    <div class="step-content">
-                                        <h4>Solutions Emerge</h4>
-                                        <p>Multiple perspectives lead to innovative solutions</p>
-                                    </div>
-                                </div>
-                                <div class="step">
-                                    <div class="step-number">4</div>
-                                    <div class="step-content">
-                                        <h4>Implement & Iterate</h4>
-                                        <p>Test solutions and refine based on feedback</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Right Sidebar -->
-                <aside class="sidebar-right">
-                    <!-- Live Activity -->
-                    <div class="card activity-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-bolt"></i> Live Activity</h3>
-                            <div class="live-indicator">
-                                <div class="live-dot"></div>
-                                <span>LIVE</span>
-                            </div>
-                        </div>
-                        <div id="activityFeed" class="activity-list">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
-
-                    <!-- Top Contributors -->
-                    <div class="card contributors-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-trophy"></i> Top Contributors</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="contributors-list" id="topContributors">
-                                <!-- Dynamic content -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Links -->
-                    <div class="card links-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-link"></i> Quick Links</h3>
-                        </div>
-                        <div class="card-body">
-                            <a href="#" class="quick-link">
-                                <i class="fas fa-book"></i>
-                                <span>Documentation</span>
-                            </a>
-                            <a href="#" class="quick-link">
-                                <i class="fas fa-question-circle"></i>
-                                <span>Help Center</span>
-                            </a>
-                            <a href="#" class="quick-link">
-                                <i class="fas fa-users"></i>
-                                <span>Community</span>
-                            </a>
-                            <a href="#" class="quick-link">
-                                <i class="fas fa-code-branch"></i>
-                                <span>API</span>
-                            </a>
-                            <a href="#" class="quick-link">
-                                <i class="fas fa-chart-bar"></i>
-                                <span>Analytics</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Newsletter -->
-                    <div class="card newsletter-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-envelope"></i> Stay Updated</h3>
-                        </div>
-                        <div class="card-body">
-                            <p>Get weekly breakthroughs and insights</p>
-                            <div class="newsletter-form">
-                                <input type="email" placeholder="Your email" id="newsletterEmail">
-                                <button class="btn-subscribe" id="subscribeBtn">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
-                            <small class="form-note">No spam. Unsubscribe anytime.</small>
-                        </div>
-                    </div>
-                </aside>
             </div>
         </div>
-    </main>
 
-    <!-- Solution Modal -->
-    <div class="modal-overlay" id="solutionModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-header-left">
-                    <h2 class="modal-title" id="modalProblemTitle">Challenge Details</h2>
-                    <div class="modal-badges">
-                        <span class="modal-badge" id="modalCategory">General</span>
-                        <span class="modal-badge solved" id="modalSolvedBadge">
-                            <i class="fas fa-check"></i>
-                            <span>Solved</span>
-                        </span>
+        <!-- Cosmic Footer -->
+        <footer class="cosmic-footer">
+            <div class="footer-warp">
+                <div class="footer-sector">
+                    <div class="sector-logo">
+                        <div class="logo-mini"></div>
+                        <span class="logo-text-mini">NEXUSMIND</span>
+                    </div>
+                    <p class="sector-description">
+                        The global neural network where human intelligence converges to solve humanity's greatest challenges.
+                    </p>
+                    <div class="sector-social">
+                        <a href="https://twitter.com" class="social-wormhole" target="_blank" onclick="trackSocial('twitter')"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-wormhole" onclick="joinCommunity()"><i class="fab fa-discord"></i></a>
+                        <a href="https://github.com" class="social-wormhole" target="_blank" onclick="trackSocial('github')"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com" class="social-wormhole" target="_blank" onclick="trackSocial('linkedin')"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
-                <div class="modal-header-right">
-                    <button class="modal-action" id="bookmarkModalBtn">
-                        <i class="far fa-bookmark"></i>
+                
+                <div class="footer-sector">
+                    <h5>Explore Topics</h5>
+                    <a href="#" class="dimension-link" onclick="filterByTopic('tech')"><i class="fas fa-microchip"></i> Technology</a>
+                    <a href="#" class="dimension-link" onclick="filterByTopic('science')"><i class="fas fa-atom"></i> Science</a>
+                    <a href="#" class="dimension-link" onclick="filterByTopic('business')"><i class="fas fa-chart-line"></i> Business</a>
+                    <a href="#" class="dimension-link" onclick="filterByTopic('health')"><i class="fas fa-heart"></i> Life & Health</a>
+                </div>
+                
+                <div class="footer-sector">
+                    <h5>Global Impact</h5>
+                    <a href="#" class="dimension-link" onclick="showImpactStats()"><i class="fas fa-globe-americas"></i> Problems Solved</a>
+                    <a href="#" class="dimension-link" onclick="showCommunityStats()"><i class="fas fa-users"></i> Active Community</a>
+                    <a href="#" class="dimension-link" onclick="showSuccessStories()"><i class="fas fa-trophy"></i> Success Stories</a>
+                    <a href="#" class="dimension-link" onclick="contactPartnership()"><i class="fas fa-handshake"></i> Partner With Us</a>
+                </div>
+                
+                <div class="footer-sector">
+                    <h5>Live Network Stats</h5>
+                    <div class="reality-stats">
+                        <div class="reality-stat">
+                            <div class="stat-glow" id="liveUsers">1,247</div>
+                            <div>Active Solvers Now</div>
+                        </div>
+                        <div class="reality-stat">
+                            <div class="stat-glow" id="solvedToday">89</div>
+                            <div>Solved Today</div>
+                        </div>
+                    </div>
+                    <button class="reality-btn" onclick="joinNetwork()">
+                        <i class="fas fa-user-plus"></i>
+                        Join the Network
                     </button>
-                    <button class="modal-action" id="shareModalBtn">
+                    <button class="reality-btn secondary" onclick="sharePlatform()">
                         <i class="fas fa-share-alt"></i>
-                    </button>
-                    <button class="modal-close" id="closeModal">
-                        <i class="fas fa-times"></i>
+                        Share With World
                     </button>
                 </div>
             </div>
             
-            <div class="modal-content">
-                <!-- Problem Section -->
-                <div class="problem-section">
-                    <div class="problem-header">
-                        <div class="problem-author-large">
-                            <div class="author-avatar-large" id="problemAvatar">M</div>
-                            <div class="author-info">
-                                <div class="author-name" id="problemAuthor">MindHiver</div>
-                                <div class="author-meta">
-                                    <span class="problem-time" id="problemTime">Just now</span>
-                                    <span class="problem-views">
-                                        <i class="fas fa-eye"></i>
-                                        <span id="problemViews">142</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="problem-stats-large">
-                            <div class="stat-large">
-                                <i class="fas fa-comment"></i>
-                                <div>
-                                    <div class="stat-value" id="solutionsCount">0</div>
-                                    <div class="stat-label">Solutions</div>
-                                </div>
-                            </div>
-                            <div class="stat-large">
-                                <i class="fas fa-heart"></i>
-                                <div>
-                                    <div class="stat-value" id="upvotesCount">0</div>
-                                    <div class="stat-label">Upvotes</div>
-                                </div>
-                            </div>
-                            <div class="stat-large">
-                                <i class="fas fa-star"></i>
-                                <div>
-                                    <div class="stat-value" id="ratingValue">0.0</div>
-                                    <div class="stat-label">Rating</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="problem-content-large">
-                        <p id="modalProblemText">Loading problem details...</p>
-                    </div>
-                    
-                    <div class="problem-actions">
-                        <button class="action-btn primary" id="upvoteProblemBtn">
-                            <i class="fas fa-chevron-up"></i>
-                            <span>Upvote</span>
-                        </button>
-                        <button class="action-btn" id="followProblemBtn">
-                            <i class="far fa-bell"></i>
-                            <span>Follow</span>
-                        </button>
-                        <button class="action-btn" id="reportProblemBtn">
-                            <i class="fas fa-flag"></i>
-                            <span>Report</span>
-                        </button>
+            <div class="footer-event-horizon">
+                <div class="cosmic-copyright">
+                    © 2024 NexusMind • Connecting Human Intelligence Globally • All Problems Have Solutions
+                </div>
+                <div class="cosmic-links">
+                    <a href="#" onclick="showTerms()">Terms of Service</a>
+                    <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                    <a href="#" onclick="contactSupport()">Contact Support</a>
+                    <a href="#" onclick="showAbout()">About Our Mission</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- AI Assistant -->
+    <div id="aiAssistant" class="ai-assistant">
+        <button class="ai-toggle" onclick="toggleAIAssistant()">
+            <i class="fas fa-robot"></i>
+            <span class="ai-pulse"></span>
+        </button>
+        <div class="ai-panel">
+            <div class="ai-header">
+                <h4><i class="fas fa-brain"></i> NexusMind AI</h4>
+                <button class="ai-close" onclick="toggleAIAssistant()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-chat" id="aiChat">
+                <div class="ai-message">
+                    <div class="ai-avatar">AI</div>
+                    <div class="message-content">
+                        Hello! I'm your AI assistant. I can help analyze problems and suggest solutions based on community patterns.
                     </div>
                 </div>
-
-                <!-- Solutions Section -->
-                <div class="solutions-section">
-                    <div class="section-title-bar">
-                        <div>
-                            <h3><i class="fas fa-lightbulb"></i> Community Solutions</h3>
-                            <p class="section-subtitle" id="solutionsSubtitle">Share your wisdom with the community</p>
-                        </div>
-                        <div class="section-controls">
-                            <select class="filter-select" id="solutionSortSelect">
-                                <option value="newest">Newest First</option>
-                                <option value="top">Top Rated</option>
-                                <option value="helpful">Most Helpful</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div id="solutionsList" class="solutions-list">
-                        <!-- Solutions will load here -->
-                    </div>
-
-                    <!-- Add Solution -->
-                    <div class="add-solution">
-                        <div class="add-solution-header">
-                            <div class="author-avatar-small" id="solutionUserAvatar">M</div>
-                            <div>
-                                <h4>Add Your Solution</h4>
-                                <p>Share your expertise and help solve this challenge</p>
-                            </div>
-                        </div>
-                        
-                        <div class="solution-input-wrapper">
-                            <textarea 
-                                id="solutionInput" 
-                                class="solution-input" 
-                                placeholder="Write your solution here... Be specific, provide examples, and explain your reasoning."
-                                rows="4"></textarea>
-                            <div class="solution-tools">
-                                <button class="tool-btn" title="Bold">
-                                    <i class="fas fa-bold"></i>
-                                </button>
-                                <button class="tool-btn" title="Italic">
-                                    <i class="fas fa-italic"></i>
-                                </button>
-                                <button class="tool-btn" title="Add code">
-                                    <i class="fas fa-code"></i>
-                                </button>
-                                <button class="tool-btn" title="Add link">
-                                    <i class="fas fa-link"></i>
-                                </button>
-                                <button class="tool-btn" title="Add image">
-                                    <i class="fas fa-image"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="solution-actions">
-                            <div class="action-left">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="anonymousCheckbox">
-                                    <span>Post anonymously</span>
-                                </label>
-                            </div>
-                            <div class="action-right">
-                                <button class="btn-secondary" id="cancelSolutionBtn">
-                                    Cancel
-                                </button>
-                                <button class="btn-primary" id="submitSolutionBtn">
-                                    <i class="fas fa-paper-plane"></i>
-                                    <span>Post Solution</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="ai-input">
+                <input type="text" id="aiInput" placeholder="Ask me anything about your problem...">
+                <button onclick="sendAIMessage()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- Notification Panel -->
-    <div class="notification-panel" id="notificationPanel">
-        <div class="notification-header">
-            <h3><i class="fas fa-bell"></i> Notifications</h3>
-            <button class="notification-clear" id="clearNotifications">
-                Clear All
-            </button>
-        </div>
-        <div class="notification-list" id="notificationList">
-            <!-- Dynamic content -->
-        </div>
-        <div class="notification-empty" id="notificationEmpty">
-            <i class="fas fa-bell-slash"></i>
-            <p>No notifications yet</p>
-        </div>
+    <!-- Energy Ripples -->
+    <div class="energy-ripples">
+        <div class="ripple r1"></div>
+        <div class="ripple r2"></div>
+        <div class="ripple r3"></div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <i class="fas fa-brain"></i>
-                        <span>MindHive</span>
-                    </div>
-                    <p class="footer-tagline">Where human intelligence converges to solve humanity's greatest challenges.</p>
-                    <div class="footer-social">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>Product</h4>
-                        <a href="#">Features</a>
-                        <a href="#">Pricing</a>
-                        <a href="#">API</a>
-                        <a href="#">Documentation</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Company</h4>
-                        <a href="#">About</a>
-                        <a href="#">Blog</a>
-                        <a href="#">Careers</a>
-                        <a href="#">Press</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Resources</h4>
-                        <a href="#">Help Center</a>
-                        <a href="#">Community</a>
-                        <a href="#">Guides</a>
-                        <a href="#">Research</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Legal</h4>
-                        <a href="#">Privacy</a>
-                        <a href="#">Terms</a>
-                        <a href="#">Security</a>
-                        <a href="#">Cookies</a>
-                    </div>
-                </div>
-                
-                <div class="footer-newsletter">
-                    <h4>Stay Ahead</h4>
-                    <p>Get the latest breakthroughs and insights in collective intelligence</p>
-                    <div class="newsletter-input">
-                        <input type="email" placeholder="Your work email" id="footerEmail">
-                        <button class="btn-subscribe" id="footerSubscribeBtn">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                    <small class="form-note">Join 10,000+ innovators</small>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <div class="copyright">
-                    © 2025 MindHive. Collective intelligence for a better world.
-                </div>
-                <div class="footer-extra">
-                    <span>Made with <i class="fas fa-heart" style="color: #ef4444;"></i> for humanity</span>
-                    <span class="footer-version">v2.0.1</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Toast Container -->
+    <!-- Notification Toast Container -->
     <div id="toastContainer"></div>
 
-    <!-- Confetti Container -->
-    <div id="confettiContainer"></div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>
