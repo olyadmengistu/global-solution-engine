@@ -3,59 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Solution Engine - Solve Problems Together</title>
+    <title>SolveMind | Collaborative Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg"></div>
-    
-    <!-- Header with 3D Logo -->
-    <header class="header">
-        <div class="logo-container">
-            <div class="logo-3d">GSE</div>
-            <h1>Global Solution Engine</h1>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>SolveMind</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                    <a href="#" class="nav-link"><i class="fas fa-question-circle"></i> Problems</a>
+                    <a href="#" class="nav-link"><i class="fas fa-lightbulb"></i> Solutions</a>
+                    <a href="#" class="nav-link"><i class="fas fa-trophy"></i> Leaders</a>
+                </div>
+            </div>
+            <div class="nav-user">
+                <input type="text" class="user-input" id="userName" placeholder="Your name" maxlength="20">
+                <div class="user-avatar" id="userAvatar">U</div>
+            </div>
         </div>
-        <p class="tagline">Where the world solves problems together</p>
-        <div class="user-section">
-            <input type="text" id="userName" placeholder="Your name (optional)" class="user-input">
-            <div id="userStats" class="user-stats" style="display: none;">
-                <span id="problemsPosted">0</span> problems posted
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Where Minds Converge to Solve</h1>
+                <p class="hero-subtitle">Present any challenge. Watch the collective intelligence find elegant solutions. Free forever.</p>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="globalProblems">2,847</div>
+                        <div class="stat-label">Active Problems</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="globalSolvers">12,459</div>
+                        <div class="stat-label">Active Minds</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="globalSolutions">45,231</div>
+                        <div class="stat-label">Solutions Generated</div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container">
-        <!-- Problem Input Section -->
-        <section class="problem-input-section">
-            <div class="glass-card">
-                <h2>What problem can we solve together?</h2>
-                <textarea id="problemInput" placeholder="Describe your problem here... (e.g., 'My elderly grandmother feels lonely living alone')" rows="4"></textarea>
-                <button id="submitProblem" class="glow-button">Submit to the World</button>
+    <main class="container main-grid">
+        <!-- Left Column: Submission & Filters -->
+        <aside class="sidebar">
+            <!-- Problem Submission -->
+            <div class="card submission-card">
+                <h3 class="card-title"><i class="fas fa-pen"></i> Present Your Challenge</h3>
+                <div class="category-tags">
+                    <span class="category-tag active" data-category="all">All Topics</span>
+                    <span class="category-tag" data-category="tech">Technology</span>
+                    <span class="category-tag" data-category="business">Business</span>
+                    <span class="category-tag" data-category="life">Life</span>
+                    <span class="category-tag" data-category="creative">Creative</span>
+                </div>
+                <textarea class="problem-input" id="problemInput" placeholder="Describe your challenge clearly and specifically..." rows="4" maxlength="500"></textarea>
+                <div class="input-footer">
+                    <span class="char-count" id="charCount">0/500</span>
+                    <button class="btn btn-primary" id="submitProblem">
+                        <i class="fas fa-paper-plane"></i> Submit to Network
+                    </button>
+                </div>
             </div>
-        </section>
 
-        <!-- Loading Indicator -->
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Connecting to the Global Brain...</p>
-        </div>
+            <!-- Quick Stats -->
+            <div class="card stats-card">
+                <h3 class="card-title"><i class="fas fa-chart-line"></i> Network Insights</h3>
+                <div class="insight-item">
+                    <div class="insight-label">Most Active Category</div>
+                    <div class="insight-value">Technology</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-label">Avg. Solution Time</div>
+                    <div class="insight-value">3.2 hours</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-label">Top Contributor</div>
+                    <div class="insight-value">Alex Chen</div>
+                </div>
+            </div>
+        </aside>
 
-        <!-- Problems Display Section -->
-        <section class="problems-section">
-            <h2>Recent Problems from the Community</h2>
+        <!-- Center Column: Problem Feed -->
+        <section class="content-main">
+            <div class="section-header">
+                <h2 class="section-title">Recent Challenges</h2>
+                <div class="section-actions">
+                    <select class="select-filter" id="sortFilter">
+                        <option value="recent">Most Recent</option>
+                        <option value="popular">Most Discussed</option>
+                        <option value="urgent">Most Urgent</option>
+                    </select>
+                </div>
+            </div>
+
             <div id="problemsContainer" class="problems-grid">
-                <!-- Problems will load here automatically -->
+                <!-- Problems will load here -->
+            </div>
+
+            <div class="load-more">
+                <button class="btn btn-outline" id="loadMoreBtn">
+                    <i class="fas fa-sync"></i> Load More Challenges
+                </button>
+            </div>
+
+            <!-- Trending Solutions -->
+            <div class="card trending-card">
+                <h3 class="card-title"><i class="fas fa-fire"></i> Trending Solutions</h3>
+                <div id="trendingSolutions" class="trending-list">
+                    <!-- Trending will load here -->
+                </div>
             </div>
         </section>
+
+        <!-- Right Column: Activity -->
+        <aside class="sidebar-right">
+            <!-- Live Activity -->
+            <div class="card activity-card">
+                <h3 class="card-title"><i class="fas fa-bolt"></i> Live Activity</h3>
+                <div id="activityFeed" class="activity-list">
+                    <!-- Activity will load here -->
+                </div>
+            </div>
+
+            <!-- How It Works -->
+            <div class="card guide-card">
+                <h3 class="card-title"><i class="fas fa-info-circle"></i> How SolveMind Works</h3>
+                <ol class="guide-steps">
+                    <li><strong>Present</strong> your challenge clearly</li>
+                    <li><strong>Collaborate</strong> with global thinkers</li>
+                    <li><strong>Refine</strong> solutions together</li>
+                    <li><strong>Implement</strong> the best approach</li>
+                </ol>
+            </div>
+        </aside>
     </main>
+
+    <!-- Solution Modal -->
+    <div class="modal" id="solutionModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalProblemTitle"></h2>
+                <div class="problem-meta" id="modalProblemMeta"></div>
+            </div>
+            <div class="modal-body">
+                <div class="problem-content">
+                    <p id="modalProblemText"></p>
+                </div>
+                
+                <div class="solutions-section">
+                    <h3><i class="fas fa-lightbulb"></i> Community Solutions</h3>
+                    <div id="solutionsList" class="solutions-list">
+                        <!-- Solutions will load here -->
+                    </div>
+                    
+                    <div class="add-solution">
+                        <h4>Add Your Solution</h4>
+                        <textarea id="solutionInput" placeholder="Share your insight clearly and helpfully..." rows="3"></textarea>
+                        <button class="btn btn-primary" id="submitSolution">
+                            <i class="fas fa-share"></i> Post Solution
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Join the movement - Help others and get help for free</p>
-        <p class="stats" id="globalStats">Loading global stats...</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <span>SolveMind</span>
+                    </div>
+                    <p class="footer-description">Connecting human intelligence to solve meaningful challenges.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                    <a href="#" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SolveMind. The future of collaborative problem-solving.</p>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>
