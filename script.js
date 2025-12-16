@@ -37,20 +37,11 @@ const appState = {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 NexusMind loaded!');
     
-    // Hide loading screen after 1 second
-    setTimeout(() => {
-        const loading = document.getElementById('loading');
-        if (loading) {
-            loading.style.display = 'none';
-        }
-        
-        // Initialize app
-        initApp();
-        
-        // Show welcome message
-        showToast('Welcome to NexusMind!', 'info');
-        
-    }, 1000);
+    // Initialize app IMMEDIATELY
+    initApp();
+    
+    // Show welcome message
+    showToast('Welcome to NexusMind!', 'info');
     
     // Setup event listeners
     setupEventListeners();
