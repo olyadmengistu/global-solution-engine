@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusMind | Simple Version</title>
+    <style>
+        body {
+            background: #0a0e17;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            color: #00d4aa;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .problem-input {
+            width: 100%;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid #00d4aa;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            min-height: 150px;
+        }
+        .submit-btn {
+            background: linear-gradient(45deg, #00d4aa, #08f7fe);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .problem-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,212,170,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,212,170,0.1);
+            border-radius: 10px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            color: #00d4aa;
+            font-weight: bold;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #00d4aa;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">NEXUSMIND</div>
+            <p>Global Collective Intelligence - Simple Version</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="problemCount">0</div>
+                <div>Problems</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="userCount">1</div>
+                <div>Users Online</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="solutionCount">0</div>
+                <div>Solutions</div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>Post Your Problem</h2>
+            <textarea class="problem-input" id="problemInput" placeholder="What problem do you need help with?"></textarea>
+            <button class="submit-btn" onclick="submitProblem()">Submit to Global Network</button>
+        </div>
+        
+        <div style="margin-top: 40px;">
+            <h2>Recent Problems</h2>
+            <div id="problemsContainer">
+                <div class="problem-card">
+                    <p>"How can we reduce plastic waste in cities?"</p>
+                    <small>Posted by: Eco Warrior • 2 hours ago</small>
+                </div>
+                <div class="problem-card">
+                    <p>"What's the best way to learn programming in 2024?"</p>
+                    <small>Posted by: Code Learner • 5 hours ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        let problems = [
+            {text: "How can we reduce plastic waste in cities?", user: "Eco Warrior", time: "2 hours ago"},
+            {text: "What's the best way to learn programming in 2024?", user: "Code Learner", time: "5 hours ago"}
+        ];
+        
+        function submitProblem() {
+            const input = document.getElementById('problemInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                showToast('Please enter a problem', 'error');
+                return;
+            }
+            
+            showToast('Problem submitted successfully!', 'success');
+            
+            // Add to list
+            problems.unshift({
+                text: text,
+                user: 'You',
+                time: 'Just now'
+            });
+            
+            updateProblems();
+            updateStats();
+            input.value = '';
+        }
+        
+        function updateProblems() {
+            const container = document.getElementById('problemsContainer');
+            container.innerHTML = '';
+            
+            problems.forEach(problem => {
+                const card = document.createElement('div');
+                card.className = 'problem-card';
+                card.innerHTML = `
+                    <p>"${problem.text}"</p>
+                    <small>Posted by: ${problem.user} • ${problem.time}</small>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function updateStats() {
+            document.getElementById('problemCount').textContent = problems.length;
+            document.getElementById('userCount').textContent = Math.floor(Math.random() * 100) + 1;
+            document.getElementById('solutionCount').textContent = Math.floor(Math.random() * 50);
+        }
+        
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.borderColor = type === 'success' ? '#00d4aa' : '#ff2e63';
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Initialize
+        updateStats();
+        showToast('Welcome to NexusMind!', 'success');
+    </script>
+</body>
+</html>
