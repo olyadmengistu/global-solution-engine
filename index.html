@@ -3,164 +3,1312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusMind | Global Collective Intelligence</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>NexusMind • Where Problems Meet Solutions</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='brainGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%231d75e9;stop-opacity:1' /%3E%3Cstop offset='50%25' style='stop-color:%234A90E2;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%230d51c0;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23brainGrad)' opacity='0.15'/%3E%3Cpath d='M50 12 C32 12 20 24 20 42 C20 48 22 54 26 58 C23 62 21 67 21 73 C21 85 32 96 50 96 C68 96 79 85 79 73 C79 67 77 62 74 58 C78 54 80 48 80 42 C80 24 68 12 50 12 Z' fill='url(%23brainGrad)' stroke='%231d75e9' stroke-width='3'/%3E%3Cpath d='M30 32 Q38 24 46 32 Q54 24 62 32 Q70 24 78 32' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M32 42 Q41 50 50 42 Q59 50 68 42' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M30 52 Q41 60 50 52 Q59 60 70 52' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M35 62 Q42 70 50 62 Q58 70 65 62' stroke='%23ffffff' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='35' cy='38' r='3' fill='%23ffffff'/%3E%3Ccircle cx='65' cy='38' r='3' fill='%23ffffff'/%3E%3Ccircle cx='40' cy='48' r='2' fill='%23ffffff'/%3E%3Ccircle cx='60' cy='48' r='2' fill='%23ffffff'/%3E%3C/svg%3E">
 </head>
 <body>
-    <!-- Main App -->
-    <div class="container">
-        <!-- Navigation -->
-        <nav class="nav">
-            <div class="logo">NEXUS<span class="logo-glow">MIND</span></div>
-            <div class="nav-links">
-                <a href="#" class="nav-link active" onclick="showSection('home')">Home</a>
-                <a href="#" class="nav-link" onclick="showSection('problems')">Problems</a>
-                <a href="#" class="nav-link" onclick="showSection('solutions')">Solutions</a>
-                <a href="#" class="nav-link" onclick="showSection('leaderboard')">Leaderboard</a>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="brain-logo">
+                <i class="fas fa-brain"></i>
             </div>
-            <div class="user-input">
-                <input type="text" id="userName" placeholder="Your name">
-            </div>
-        </nav>
-        
-        <!-- Hero Section -->
-        <section class="hero">
-            <h1>Where Human Intelligence Converges</h1>
-            <p class="hero-subtitle">
-                Post any problem. Watch the global neural network solve it in real-time.
-                <span class="subtitle-glow">Free. Forever.</span>
-            </p>
-        </section>
-        
-        <!-- Live Stats -->
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-number" id="liveProblems">2,847</div>
-                <div>Active Problems</div>
-                <div class="stat-pulse"></div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="liveSolvers">12,459</div>
-                <div>Active Minds</div>
-                <div class="stat-pulse"></div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="liveSolutions">45,231</div>
-                <div>Solutions Generated</div>
-                <div class="stat-pulse"></div>
-            </div>
+            <h2 class="loading-title">NexusMind</h2>
+            <p class="loading-subtitle">Connecting global minds • Finding solutions together</p>
         </div>
-        
-        <!-- Problem Input -->
-        <section class="input-section">
-            <h2><i class="fas fa-broadcast-tower"></i> Broadcast Your Challenge</h2>
-            <textarea id="problemInput" placeholder="Describe your challenge... Example: 'How can I reduce electricity bills without expensive changes?'"></textarea>
-            <div class="input-footer">
-                <div class="char-counter">
-                    <div class="char-bar">
-                        <div class="char-fill" id="charFill"></div>
+    </div>
+
+    <!-- Authentication Container -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-card" id="authCard">
+            <!-- Login Form (Default) -->
+            <div class="auth-form-container" id="loginForm">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <span class="char-count" id="charCount">0/500</span>
+                    <h2 class="auth-title">Welcome Back</h2>
+                    <p class="auth-subtitle">Sign in to continue solving problems</p>
                 </div>
-                <button class="submit-btn" onclick="submitProblem()" id="submitProblem">
-                    <i class="fas fa-satellite"></i> Submit to Global Network
-                </button>
-            </div>
-        </section>
-        
-        <!-- Problems Grid -->
-        <section class="problems-section">
-            <div class="section-header">
-                <h2><i class="fas fa-network-wired"></i> Live Problem Feed</h2>
-                <span class="badge">ACTIVE NOW</span>
+                
+                <form class="auth-form" id="loginFormElements">
+                    <div class="form-group">
+                        <label class="form-label">Username or Email</label>
+                        <input type="text" class="form-input" id="loginUsername" placeholder="Enter your username or email" required>
+                        <div class="auth-error" id="loginUsernameError">Please enter a valid username or email</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+                        <div class="auth-error" id="loginPasswordError">Password is required</div>
+                    </div>
+                    
+                    <div class="auth-remember">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <label for="rememberMe">Keep me logged in permanently</label>
+                    </div>
+                    
+                    <div class="auth-actions">
+                        <button type="submit" class="auth-btn auth-btn-primary" id="loginBtn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Sign In</span>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="auth-switch">
+                    <p class="auth-switch-text">Don't have an account?</p>
+                    <button class="auth-switch-btn" id="switchToSignup">Create New Account</button>
+                </div>
             </div>
             
-            <div class="problems-grid" id="problemsContainer">
-                <!-- Problems will appear here -->
-                <div class="problem-card">
-                    <div class="problem-text">
-                        "How can we reduce plastic waste in cities effectively?"
+            <!-- Signup Form (Hidden by default) -->
+            <div class="auth-form-container" id="signupForm" style="display: none;">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <i class="fas fa-user-plus"></i>
                     </div>
-                    <div class="problem-meta">
-                        <div class="author">
-                            <div class="avatar">E</div>
-                            <div class="author-info">
-                                <div class="author-name">Eco Warrior</div>
-                                <div class="time">2 hours ago</div>
+                    <h2 class="auth-title">Join NexusMind</h2>
+                    <p class="auth-subtitle">Create your account to start solving</p>
+                </div>
+                
+                <form class="auth-form" id="signupFormElements">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" id="signupName" placeholder="Enter your full name" required>
+                        <div class="auth-error" id="signupNameError">Please enter your name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="signupUsername" placeholder="Choose a username" required>
+                        <div class="auth-error" id="signupUsernameError">Username must be 3+ characters</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email" required>
+                        <div class="auth-error" id="signupEmailError">Please enter a valid email</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-input" id="signupPassword" placeholder="Create a password (min 6 characters)" required>
+                        <div class="auth-error" id="signupPasswordError">Password must be 6+ characters</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-input" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                        <div class="auth-error" id="signupConfirmError">Passwords do not match</div>
+                    </div>
+                    
+                    <div class="auth-actions">
+                        <button type="submit" class="auth-btn auth-btn-primary" id="signupBtn">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Create Account</span>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="auth-switch">
+                    <p class="auth-switch-text">Already have an account?</p>
+                    <button class="auth-switch-btn" id="switchToLogin">Sign In Instead</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="appContainer" style="display: none;">
+        <header class="header">
+            <div class="container">
+                <div class="logo-section">
+                    <a href="#" class="logo-link" id="logo-home">
+                        <div class="logo-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="logo-text">
+                            <h1 class="logo-name">Nexus<span>Mind</span></h1>
+                            <p class="logo-tagline">Connect • Solve • Grow</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search problems, people, topics...">
+                        <div class="search-shortcuts">
+                            <span class="shortcut">#tech</span>
+                            <span class="shortcut">#business</span>
+                            <span class="shortcut">#creative</span>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="main-nav">
+                    <a href="#" class="nav-link active" data-page="home" data-tooltip="Home" id="nav-home">
+                        <div class="nav-icon-wrapper">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span class="nav-label">Home</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="network" data-tooltip="Network" id="nav-network">
+                        <div class="nav-icon-wrapper">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="nav-label">Network</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="problems" data-tooltip="Problems" id="nav-problems">
+                        <div class="nav-icon-wrapper">
+                            <i class="fas fa-question-circle"></i>
+                            <span class="nav-badge">3</span>
+                        </div>
+                        <span class="nav-label">Problems</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="messages" data-tooltip="Messages" id="nav-messages">
+                        <div class="nav-icon-wrapper">
+                            <i class="fas fa-comments"></i>
+                            <span class="nav-badge">2</span>
+                        </div>
+                        <span class="nav-label">Messages</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="notifications" data-tooltip="Notifications" id="nav-notifications">
+                        <div class="nav-icon-wrapper">
+                            <i class="fas fa-bell"></i>
+                            <span class="nav-badge">5</span>
+                        </div>
+                        <span class="nav-label">Notifications</span>
+                    </a>
+                </nav>
+
+                <div class="user-section">
+                    <div class="user-profile" id="userProfileMenu">
+                        <div class="avatar-wrapper">
+                            <img src="https://images.unsplash.com/photo-1512485694743-9c9538b4e6e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Your Profile" class="avatar" id="headerProfileImage">
+                            <span class="online-dot"></span>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name" id="currentUserName">Alex Johnson</span>
+                            <span class="user-role" id="currentUserRole">Problem Solver</span>
+                        </div>
+                        <i class="fas fa-chevron-down user-dropdown"></i>
+                        <div class="profile-menu" id="profileMenu">
+                            <a href="#" class="menu-item" data-action="profile">
+                                <i class="fas fa-user"></i>
+                                <span>View Profile</span>
+                            </a>
+                            <a href="#" class="menu-item" data-action="edit-profile" id="editProfileBtn">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Edit Profile</span>
+                            </a>
+                            <a href="#" class="menu-item" data-action="settings">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                            <a href="#" class="menu-item" data-action="help">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Help & Support</span>
+                            </a>
+                            <div class="menu-divider"></div>
+                            <a href="#" class="menu-item" data-action="logout" id="profileLogoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Log Out</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container main-container">
+                <aside class="sidebar left-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-cover">
+                            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Cover" class="cover-image" id="coverImage">
+                            <div class="cover-overlay"></div>
+                            <input type="file" id="coverUpload" accept="image/*" style="display: none;">
+                            <button class="cover-action" id="coverUploadBtn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="profile-body">
+                            <div class="profile-avatar">
+                                <img src="https://images.unsplash.com/photo-1512485694743-9c9538b4e6e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Alex Johnson" id="profileImage">
+                                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                                <button class="avatar-action" id="avatarUploadBtn">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                            </div>
+                            <h3 class="profile-name" id="profileName">Alex Johnson</h3>
+                            <p class="profile-title" id="profileTitle">Software Engineer & Problem Solver</p>
+                            <div class="profile-stats">
+                                <div class="stat"><strong id="solvedCount">24</strong><span>Solved</span></div>
+                                <div class="stat"><strong id="successRate">72%</strong><span>Success</span></div>
+                                <div class="stat"><strong id="helpedCount">18</strong><span>Helped</span></div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn btn-primary" id="editProfileSidebarBtn">
+                                    <i class="fas fa-user-edit"></i> Edit Profile
+                                </button>
+                                <button class="btn btn-secondary" id="shareProfileBtn">
+                                    <i class="fas fa-share"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="links-card">
+                        <h4 class="links-title">Quick Links</h4>
+                        <a href="#" class="link-item" id="myNetworkLink">
+                            <div class="link-icon" style="background: linear-gradient(135deg, #0e54a3, #174fa8);">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <div class="link-content">
+                                <span class="link-text">My Network</span>
+                                <small class="link-meta">87 connections</small>
+                            </div>
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Home Page -->
+                <section class="main-feed" id="homePage">
+                    <!-- Problems Highlights Section -->
+                    <div class="problems-highlights-section">
+                        <div class="problems-highlights-container">
+                            <div class="problem-highlight-card create-problem-card" id="createProblemHighlight">
+                                <div class="problem-highlight-inner">
+                                    <div class="add-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <span class="card-label">Post a Problem</span>
+                                </div>
+                            </div>
+                            <div id="highlightedProblemsContainer"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic posts container -->
+                    <div id="dynamicPostsContainer"></div>
+                    
+                    <!-- Example post -->
+                    <div class="post-card card animate__animated animate__fadeInUp" id="examplePost">
+                        <div class="post-header">
+                            <div class="post-author">
+                                <div class="author-avatar">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Sarah Johnson">
+                                </div>
+                                <div class="author-info">
+                                    <h4>Sarah Johnson <span class="author-badge">PRO</span></h4>
+                                    <div class="post-meta"><span>Business Consultant • 2 hours ago</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <div class="problem-highlight">
+                                <div class="problem-text">
+                                    <h3>E-commerce Conversion Too Low</h3>
+                                    <div class="post-text-container" id="post-text-example">
+                                        <div class="post-text">
+                                            My online boutique gets 500+ visitors daily but only 2-3 sales. Looking for actionable solutions!
+                                        </div>
+                                        <div class="post-text-fade"></div>
+                                    </div>
+                                    <div class="see-more-wrapper">
+                                        <button class="see-more-btn" data-post-id="example" style="display: none;">
+                                            <span>See More</span>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-stats">
+                                <div class="stats-left">
+                                    <span class="stats-text">2 solutions • 18 likes • 7 comments</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <button class="interaction-btn offer-btn" data-post-id="1" data-offered="false">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Offer Solution</span>
+                            </button>
+                            <button class="interaction-btn like-btn" data-post-id="1" data-liked="false">
+                                <i class="far fa-thumbs-up"></i>
+                                <span>Like</span>
+                            </button>
+                            <button class="interaction-btn comment-btn" data-post-id="1">
+                                <i class="far fa-comment"></i>
+                                <span>Comment</span>
+                            </button>
+                        </div>
+                        <div class="post-comments" style="display: none;" data-post-id="1">
+                            <div class="comments-list" id="comments-list-1">
+                                <!-- Comments will appear here -->
+                                <div class="comment-item" data-comment-id="c1">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Sarah Johnson">
+                                    <div class="comment-content">
+                                        <div class="comment-header">
+                                            <strong>Sarah Johnson</strong>
+                                            <span>2 hours ago</span>
+                                        </div>
+                                        <p class="comment-text">Try optimizing your product images and adding customer reviews!</p>
+                                        <div class="comment-actions">
+                                            <button class="comment-like-btn" data-comment-id="c1" data-liked="false">
+                                                <i class="far fa-thumbs-up"></i>
+                                                <span class="like-count">0</span>
+                                            </button>
+                                            <button class="comment-reply-btn">Reply</button>
+                                            <span class="comment-time">2h</span>
+                                        </div>
+                                        <!-- Reply form (hidden by default) -->
+                                        <div class="reply-form" style="display: none;">
+                                            <input type="text" placeholder="Write a reply..." class="reply-input">
+                                            <button class="reply-submit-btn">Reply</button>
+                                        </div>
+                                        <!-- Replies will appear here -->
+                                        <div class="replies-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-comment">
+                                <img src="https://images.unsplash.com/photo-1512485694743-9c9538b4e6e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="You">
+                                <input type="text" placeholder="Add a comment..." class="comment-input" data-post-id="1">
+                                <button class="comment-submit-btn" data-post-id="1">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Network Page -->
+                <section class="main-feed" id="networkPage" style="display: none;">
+                    <div class="card network-card">
+                        <div class="network-header">
+                            <h2>My Network</h2>
+                            <div class="network-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search connections..." id="networkSearch">
+                            </div>
+                        </div>
+                        
+                        <div class="network-tabs">
+                            <button class="network-tab active" data-tab="connections">Connections (87)</button>
+                            <button class="network-tab" data-tab="requests">Requests (3)</button>
+                            <button class="network-tab" data-tab="suggestions">Suggestions</button>
+                            <button class="network-tab" data-tab="groups">Groups (2)</button>
+                        </div>
+                        
+                        <!-- Connections Tab -->
+                        <div class="edit-tab-content active" id="connections-tab">
+                            <div class="network-actions">
+                                <button class="btn btn-small" id="sortConnections">
+                                    <i class="fas fa-sort"></i> Sort by: Recent
+                                </button>
+                                <button class="btn btn-small" id="filterConnections">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                            </div>
+                            <div class="connections-grid" id="connectionsGrid">
+                                <!-- Connections loaded dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Requests Tab -->
+                        <div class="edit-tab-content" id="requests-tab">
+                            <div class="requests-list" id="requestsList">
+                                <!-- Connection requests loaded dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Suggestions Tab -->
+                        <div class="edit-tab-content" id="suggestions-tab">
+                            <div class="suggestions-grid" id="suggestionsGrid">
+                                <!-- Suggestions loaded dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Groups Tab -->
+                        <div class="edit-tab-content" id="groups-tab">
+                            <div class="groups-list" id="groupsList">
+                                <!-- Groups loaded dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Messaging Section -->
+                        <div class="messaging-section">
+                            <h3><i class="fas fa-comments"></i> Direct Messages</h3>
+                            <div class="messages-container" id="messagesContainer">
+                                <!-- Active conversations -->
+                            </div>
+                            <div class="message-compose-area">
+                                <input type="text" placeholder="Search to start a conversation..." id="messageSearch" class="form-input" style="width: 100%; margin-bottom: 16px;">
+                                <div class="message-compose" style="display: none;" id="messageCompose">
+                                    <textarea placeholder="Type your message..." id="messageText"></textarea>
+                                    <button class="btn btn-primary" id="sendMessageBtn">
+                                        <i class="fas fa-paper-plane"></i> Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Problems Page -->
+                <section class="main-feed" id="problemsPage" style="display: none;">
+                    <div class="card problems-card">
+                        <div class="problems-header">
+                            <h2>All Problems</h2>
+                            <div class="problems-filters">
+                                <button class="filter-btn active">Recent</button>
+                                <button class="filter-btn">Unsolved</button>
+                                <button class="filter-btn">Popular</button>
+                            </div>
+                        </div>
+                        <div class="problems-list" id="problemsList">
+                            <!-- Problems will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Messages Page -->
+                <section class="main-feed" id="messagesPage" style="display: none;">
+                    <div class="card messages-card">
+                        <div class="messages-header">
+                            <h2>Messages</h2>
+                            <button class="new-message-btn">
+                                <i class="fas fa-plus"></i> New Message
+                            </button>
+                        </div>
+                        <div class="messages-list">
+                            <!-- Messages will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Page -->
+                <section class="main-feed" id="notificationsPage" style="display: none;">
+                    <div class="card notifications-card">
+                        <div class="notifications-header">
+                            <h2>Notifications</h2>
+                            <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                        </div>
+                        <div class="notifications-list">
+                            <!-- Notifications will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="sidebar right-sidebar">
+                    <div class="stats-widget card">
+                        <h3 class="widget-title">📊 NexusMind Today</h3>
+                        <div class="stat-item">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4A90E2, #357AE8);"><i class="fas fa-question-circle"></i></div>
+                            <div class="stat-info"><h4>847</h4><p>Problems Posted</p></div>
+                        </div>
+                    </div>
+                    <div class="footer-widget">
+                        <p class="copyright">© 2024 NexusMind. Made with ❤️ by a 10-year-old visionary.</p>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <!-- Edit Profile Modal -->
+        <div class="edit-profile-modal" id="editProfileModal">
+            <div class="edit-profile-content">
+                <div class="modal-header">
+                    <div class="header-decoration"></div>
+                    <h3>
+                        <span>
+                            <i class="fas fa-user-edit"></i>
+                        </span>
+                        Edit Profile
+                    </h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                
+                <div class="edit-tabs">
+                    <button class="edit-tab active" data-tab="basic">
+                        <i class="fas fa-user"></i> Basic Info
+                    </button>
+                    <button class="edit-tab" data-tab="social">
+                        <i class="fas fa-share-alt"></i> Social Links
+                    </button>
+                    <button class="edit-tab" data-tab="security">
+                        <i class="fas fa-shield-alt"></i> Security & Privacy
+                    </button>
+                    <button class="edit-tab" data-tab="privacy">
+                        <i class="fas fa-lock"></i> Privacy
+                    </button>
+                </div>
+                
+                <div class="edit-tab-content active" id="basic-tab">
+                    <div style="padding: 30px; background: linear-gradient(135deg, #fafbff 0%, #f5f7ff 100%);">
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-camera"></i> Profile Picture
+                            </label>
+                            <div class="avatar-upload-container" style="position: relative; display: flex; align-items: center; gap: 20px; padding: 20px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05)); border-radius: 16px; border: 2px dashed rgba(102, 126, 234, 0.3); transition: all 0.3s ease;">
+                                <div style="position: relative;">
+                                    <img id="editProfileImage" src="" alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid transparent; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #667eea, #764ba2) border-box; box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);">
+                                    <div style="position: absolute; bottom: 5px; right: 5px; background: linear-gradient(135deg, #f093fb, #f5576c); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <button class="btn btn-small" id="changePhotoBtn" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);">
+                                        <i class="fas fa-upload"></i> Upload Photo
+                                    </button>
+                                    <p style="margin-top: 8px; color: #6b7280; font-size: 13px;">JPG, PNG or GIF. Max 5MB</p>
+                                </div>
+                                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-user"></i> Full Name
+                            </label>
+                            <input type="text" class="form-input" id="editName" placeholder="Enter your full name" style="background: linear-gradient(135deg, #ffffff, #f8f9ff); border: 2px solid rgba(102, 126, 234, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #f093fb, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-briefcase"></i> Professional Title
+                            </label>
+                            <input type="text" class="form-input" id="editTitle" placeholder="e.g., Software Engineer" style="background: linear-gradient(135deg, #ffffff, #fff5f8); border: 2px solid rgba(240, 147, 251, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(240, 147, 251, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-align-left"></i> Bio
+                            </label>
+                            <textarea class="form-input" id="editBio" rows="4" placeholder="Tell us about yourself..." style="background: linear-gradient(135deg, #ffffff, #f0ffff); border: 2px solid rgba(79, 172, 254, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(79, 172, 254, 0.05); resize: vertical;"></textarea>
+                            <div class="char-counter" id="bioCounter" style="text-align: right; margin-top: 8px; font-size: 12px; color: #6b7280; font-weight: 500;">0/250</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #43e97b, #38f9d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-map-marker-alt"></i> Location
+                            </label>
+                            <input type="text" class="form-input" id="editLocation" placeholder="City, Country" style="background: linear-gradient(135deg, #ffffff, #f0fff4); border: 2px solid rgba(67, 233, 123, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(67, 233, 123, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #fda085, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-tags"></i> Expertise Tags
+                            </label>
+                            <div class="tags-input-container" style="background: linear-gradient(135deg, #ffffff, #fff5f5); border: 2px solid rgba(253, 160, 133, 0.1); border-radius: 12px; padding: 16px;">
+                                <input type="text" class="form-input" id="editTags" placeholder="Add skills (press Enter)" style="background: transparent; border: none; padding: 0; font-size: 15px;">
+                                <div class="tags-container" id="tagsContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="problem-card">
-                    <div class="problem-text">
-                        "What's the fastest way to learn programming in 2024?"
+                <div class="edit-tab-content" id="social-tab">
+                    <div style="padding: 30px; background: linear-gradient(135deg, #fff5f8 0%, #fff0f5 100%);">
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #1DA1F2, #0d8bd9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </label>
+                            <input type="url" class="form-input" id="editTwitter" placeholder="https://twitter.com/username" style="background: linear-gradient(135deg, #ffffff, #f0f8ff); border: 2px solid rgba(29, 161, 242, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(29, 161, 242, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #0077B5, #005885); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </label>
+                            <input type="url" class="form-input" id="editLinkedin" placeholder="https://linkedin.com/in/username" style="background: linear-gradient(135deg, #ffffff, #f0f8ff); border: 2px solid rgba(0, 119, 181, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 119, 181, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #333333, #24292e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fab fa-github"></i> GitHub
+                            </label>
+                            <input type="url" class="form-input" id="editGithub" placeholder="https://github.com/username" style="background: linear-gradient(135deg, #ffffff, #f8f8f8); border: 2px solid rgba(51, 51, 51, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(51, 51, 51, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #FF6B6B, #EE5A24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-globe"></i> Personal Website
+                            </label>
+                            <input type="url" class="form-input" id="editWebsite" placeholder="https://yourwebsite.com" style="background: linear-gradient(135deg, #ffffff, #fff5f5); border: 2px solid rgba(255, 107, 107, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.05);">
+                        </div>
                     </div>
-                    <div class="problem-meta">
-                        <div class="author">
-                            <div class="avatar">C</div>
-                            <div class="author-info">
-                                <div class="author-name">Code Learner</div>
-                                <div class="time">5 hours ago</div>
+                </div>
+                
+                <div class="edit-tab-content" id="security-tab">
+                    <div style="padding: 30px; background: linear-gradient(135deg, #f0ffff 0%, #e6f7ff 100%);">
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-lock"></i> Current Password
+                            </label>
+                            <input type="password" class="form-input" id="currentPassword" placeholder="Enter current password" style="background: linear-gradient(135deg, #ffffff, #f0ffff); border: 2px solid rgba(79, 172, 254, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(79, 172, 254, 0.05);">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-key"></i> New Password
+                            </label>
+                            <input type="password" class="form-input" id="newPassword" placeholder="Enter new password" style="background: linear-gradient(135deg, #ffffff, #f8f9ff); border: 2px solid rgba(102, 126, 234, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.05);">
+                            <div class="password-strength" id="passwordStrength" style="margin-top: 8px; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981); transition: width 0.3s ease; border-radius: 3px;"></div>
+                            </div>
+                            <p style="margin-top: 6px; font-size: 12px; color: #6b7280;">Use 8+ characters with mixed case, numbers & symbols</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" style="background: linear-gradient(135deg, #43e97b, #38f9d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-check-circle"></i> Confirm New Password
+                            </label>
+                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password" style="background: linear-gradient(135deg, #ffffff, #f0fff4); border: 2px solid rgba(67, 233, 123, 0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(67, 233, 123, 0.05);">
+                        </div>
+                        
+                        <button class="btn btn-primary" id="changePasswordBtn" style="margin-top: 20px; background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border: none; padding: 14px 28px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(79, 172, 254, 0.3);">
+                            <i class="fas fa-shield-alt"></i> Update Password
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="edit-tab-content" id="privacy-tab">
+                    <div style="padding: 30px; background: linear-gradient(135deg, #f0fff4 0%, #e6ffe6 100%);">
+                        <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(135deg, #ffffff, #f0fff4); border-radius: 16px; margin-bottom: 16px; border: 2px solid rgba(67, 233, 123, 0.1); box-shadow: 0 2px 8px rgba(67, 233, 123, 0.05);">
+                            <div class="privacy-info">
+                                <h4 style="background: linear-gradient(135deg, #43e97b, #38f9d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; margin: 0 0 4px 0; font-size: 16px;">
+                                    <i class="fas fa-eye" style="margin-right: 8px;"></i> Profile Visibility
+                                </h4>
+                                <p style="margin: 0; color: #6b7280; font-size: 14px;">Who can see your profile</p>
+                            </div>
+                            <select id="profileVisibility" class="privacy-select" style="background: linear-gradient(135deg, #ffffff, #f0fff4); border: 2px solid rgba(67, 233, 123, 0.2); border-radius: 8px; padding: 8px 12px; font-size: 14px; color: #374151; font-weight: 500;">
+                                <option value="public">Everyone</option>
+                                <option value="connections">Connections Only</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+                        
+                        <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(135deg, #ffffff, #fff5f5); border-radius: 16px; margin-bottom: 16px; border: 2px solid rgba(253, 160, 133, 0.1); box-shadow: 0 2px 8px rgba(253, 160, 133, 0.05);">
+                            <div class="privacy-info">
+                                <h4 style="background: linear-gradient(135deg, #fda085, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; margin: 0 0 4px 0; font-size: 16px;">
+                                    <i class="fas fa-share-alt" style="margin-right: 8px;"></i> Activity Visibility
+                                </h4>
+                                <p style="margin: 0; color: #6b7280; font-size: 14px;">Who can see your posts and solutions</p>
+                            </div>
+                            <select id="activityVisibility" class="privacy-select" style="background: linear-gradient(135deg, #ffffff, #fff5f5); border: 2px solid rgba(253, 160, 133, 0.2); border-radius: 8px; padding: 8px 12px; font-size: 14px; color: #374151; font-weight: 500;">
+                                <option value="public">Everyone</option>
+                                <option value="connections">Connections Only</option>
+                            </select>
+                        </div>
+                        
+                        <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(135deg, #ffffff, #f8f9ff); border-radius: 16px; border: 2px solid rgba(102, 126, 234, 0.1); box-shadow: 0 2px 8px rgba(102, 126, 234, 0.05);">
+                            <div class="privacy-info">
+                                <h4 style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; margin: 0 0 4px 0; font-size: 16px;">
+                                    <i class="fas fa-envelope" style="margin-right: 8px;"></i> Email Notifications
+                                </h4>
+                                <p style="margin: 0; color: #6b7280; font-size: 14px;">Receive email updates</p>
+                            </div>
+                            <div class="toggle-switch" style="position: relative;">
+                                <input type="checkbox" id="emailNotifications" checked style="opacity: 0; width: 0; height: 0;">
+                                <label for="emailNotifications" style="position: relative; display: inline-block; width: 60px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px; cursor: pointer; transition: all 0.3s ease;">
+                                    <span style="position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; background: white; border-radius: 50%; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="edit-modal-footer" style="padding: 25px 30px; background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%); border-top: 2px solid rgba(102, 126, 234, 0.1); display: flex; justify-content: space-between; align-items: center; border-radius: 0 0 20px 20px;">
+                    <button class="btn btn-secondary" id="cancelEditBtn" style="background: linear-gradient(135deg, #f3f4f6, #e5e7eb); color: #6b7280; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn btn-primary" id="saveProfileBtn" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 14px 32px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Capture Modal -->
+        <div class="camera-modal" id="cameraModal">
+            <div class="camera-content">
+                <div class="camera-header">
+                    <h3>
+                        <i class="fas fa-camera"></i> <span id="cameraTitle">Capture Photo</span>
+                    </h3>
+                    <button class="close-camera">&times;</button>
+                </div>
+                
+                <div class="camera-body">
+                    <div class="recording-indicator" id="recordingIndicator">
+                        Recording...
+                    </div>
+                    <video id="cameraVideo"></video>
+                    <canvas id="cameraCanvas"></canvas>
+                    <img id="capturedImage">
+                </div>
+                
+                <div class="camera-controls">
+                    <button id="switchCameraBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> Switch Camera
+                    </button>
+                    <button id="startCameraBtn" class="btn">
+                        <i class="fas fa-play"></i> Start Camera
+                    </button>
+                    <button id="captureBtn" class="btn btn-success">
+                        <i class="fas fa-camera"></i> Capture
+                    </button>
+                    <button id="recordBtn" class="btn btn-danger">
+                        <i class="fas fa-circle"></i> Record
+                    </button>
+                    <button id="stopRecordBtn" class="btn btn-warning">
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                    <button id="retakeBtn" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Retake
+                    </button>
+                    <button id="usePhotoBtn" class="btn">
+                        <i class="fas fa-check"></i> Use Photo
+                    </button>
+                    <button id="useVideoBtn" class="btn">
+                        <i class="fas fa-check"></i> Use Video
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Profile Modal -->
+        <div class="view-profile-modal" id="viewProfileModal">
+            <div class="view-profile-content">
+                <div class="view-profile-header">
+                    <div class="profile-cover-large">
+                        <img id="viewCoverImage" src="https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Cover">
+                        <div class="cover-gradient"></div>
+                    </div>
+                    <div class="profile-info-section">
+                        <div class="profile-avatar-large">
+                            <img id="viewProfileImage" src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Profile">
+                        </div>
+                        <div class="profile-details">
+                            <h2 id="viewProfileName">Alex Johnson</h2>
+                            <p id="viewProfileTitle">Software Engineer & Problem Solver</p>
+                            <p id="viewProfileBio">Passionate about solving complex problems with elegant code. Love connecting with other problem solvers!</p>
+                            <div class="profile-stats-large">
+                                <div class="stat-item">
+                                    <strong id="viewSolvedCount">24</strong>
+                                    <span>Solved</span>
+                                </div>
+                                <div class="stat-item">
+                                    <strong id="viewHelpedCount">18</strong>
+                                    <span>Helped</span>
+                                </div>
+                                <div class="stat-item">
+                                    <strong id="viewConnectionsCount">87</strong>
+                                    <span>Connections</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="close-view-profile" id="closeViewProfileBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="view-profile-body">
+                    <div class="profile-tabs">
+                        <button class="profile-tab active" data-tab="posts">
+                            <i class="fas fa-question-circle"></i> Posts
+                        </button>
+                        <button class="profile-tab" data-tab="about">
+                            <i class="fas fa-user"></i> About
+                        </button>
+                    </div>
+                    
+                    <div class="profile-tab-content active" id="posts-tab">
+                        <h3><i class="fas fa-lightbulb" style="color: #1d75e9;"></i> Recent Posts</h3>
+                        <div id="userPostsList" class="user-posts-list">
+                            <div class="user-post-card">
+                                <h4 style="color: #212121; margin: 0 0 8px 0; font-size: 16px;">🚀 Need Help: E-commerce Conversion Too Low!</h4>
+                                <p style="color: #757575; margin: 0 0 12px 0; font-size: 14px; line-height: 1.4;">My online boutique gets 500+ visitors daily but only 2-3 sales. Looking for actionable solutions!</p>
+                                <div style="display: flex; gap: 15px; font-size: 13px; color: #9E9E9E;">
+                                    <span><i class="fas fa-lightbulb"></i> 2 solutions</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 18 likes</span>
+                                    <span><i class="fas fa-comment"></i> 7 comments</span>
+                                    <span><i class="fas fa-clock"></i> 2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="user-post-card">
+                                <h4 style="color: #212121; margin: 0 0 8px 0; font-size: 16px;">💡 Best practices for React performance optimization</h4>
+                                <p style="color: #757575; margin: 0 0 12px 0; font-size: 14px; line-height: 1.4;">Sharing my experience with optimizing React applications for better user experience.</p>
+                                <div style="display: flex; gap: 15px; font-size: 13px; color: #9E9E9E;">
+                                    <span><i class="fas fa-lightbulb"></i> 5 solutions</span>
+                                    <span><i class="fas fa-thumbs-up"></i> 32 likes</span>
+                                    <span><i class="fas fa-comment"></i> 12 comments</span>
+                                    <span><i class="fas fa-clock"></i> 1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-tab-content" id="about-tab">
+                        <h3><i class="fas fa-info-circle" style="color: #1d75e9;"></i> About</h3>
+                        <div class="about-section">
+                            <div class="about-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="viewLocation">San Francisco, CA</span>
+                            </div>
+                            <div class="about-item">
+                                <i class="fas fa-envelope"></i>
+                                <span id="viewEmail">alex@example.com</span>
+                            </div>
+                            <div class="about-item">
+                                <i class="fas fa-calendar"></i>
+                                <span id="viewJoinedDate">Joined January 2024</span>
+                            </div>
+                            <div class="about-item">
+                                <i class="fas fa-trophy"></i>
+                                <span>Top Solver • 24 Problems Solved</span>
+                            </div>
+                            <div class="about-item">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Average Rating</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="section-footer">
-                <button class="load-btn" onclick="loadMoreProblems()">
-                    <i class="fas fa-sync-alt"></i> Load More Problems
-                </button>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="settings-modal" id="settingsModal">
+            <div class="settings-content">
+                <div class="modal-header">
+                    <h3>
+                        <i class="fas fa-cog"></i> Settings
+                    </h3>
+                    <button class="close-settings">&times;</button>
+                </div>
+                
+                <div class="settings-body">
+                    <div class="settings-section">
+                        <h4>
+                            <i class="fas fa-bell"></i> Notifications
+                        </h4>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label for="notificationToggle">Enable Notifications</label>
+                                <p>Receive push notifications for new messages and interactions</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="notificationToggle" checked>
+                                <label for="notificationToggle"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label for="emailNotificationToggle" style="font-weight: 500; color: #212121;">Email Notifications</label>
+                                <p style="font-size: 13px; color: #757575; margin-top: 4px;">Receive email updates about your account activity</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="emailNotificationToggle" checked>
+                                <label for="emailNotificationToggle"></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section" style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #EEEEEE;">
+                        <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #212121; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-eye" style="color: #1d75e9;"></i> Privacy
+                        </h4>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label for="profileVisibilityToggle" style="font-weight: 500; color: #212121;">Profile Visibility</label>
+                                <p style="font-size: 13px; color: #757575; margin-top: 4px;">Control who can see your profile information</p>
+                            </div>
+                            <select id="profileVisibilityToggle" class="privacy-select" style="min-width: 140px;">
+                                <option value="public">Public</option>
+                                <option value="connections">Connections</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label for="activityVisibilityToggle" style="font-weight: 500; color: #212121;">Activity Visibility</label>
+                                <p style="font-size: 13px; color: #757575; margin-top: 4px;">Control who can see your posts and solutions</p>
+                            </div>
+                            <select id="activityVisibilityToggle" class="privacy-select" style="min-width: 140px;">
+                                <option value="public">Public</option>
+                                <option value="connections">Connections</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-footer" style="padding: 20px 30px; border-top: 1px solid #EEEEEE; display: flex; justify-content: flex-end; gap: 16px;">
+                    <button class="btn btn-secondary" id="cancelSettingsBtn">Cancel</button>
+                    <button class="btn btn-primary" id="saveSettingsBtn">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
             </div>
-        </section>
+        </div>
+
+        <!-- Help & Support Modal -->
+        <div class="help-modal" id="helpModal">
+            <div class="help-content">
+                <div class="modal-header" style="padding: 25px 30px; background: linear-gradient(135deg, #4A90E2, #357AE8); color: white; border-radius: 18px 18px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; line-height: 1.3;">
+                        <i class="fas fa-question-circle"></i> Help & Support
+                    </h3>
+                    <button class="close-help" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; font-size: 24px; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;">&times;</button>
+                </div>
+                
+                <div class="help-body" style="padding: 30px;">
+                    <!-- FAQ Section -->
+                    <div class="help-section">
+                        <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #212121; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-book" style="color: #1d75e9;"></i> Frequently Asked Questions
+                        </h4>
+                        
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <span>How do I post a problem?</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Click on the "What problem are you facing today?" input box at the top of your feed, type your problem description, and click "Post Problem". You can also add images or files to provide more context.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <span>How do I offer solutions to problems?</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Below each problem post, you'll see an "Offer Solution" button. Click it to provide your solution. The best solutions are voted on by the community and can earn you recognition points.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <span>How do I connect with other users?</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Visit the "My Network" page to find and connect with other problem solvers. You can search for users, view their profiles, and send connection requests to build your professional network.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <span>What are the privacy settings?</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>You can control who sees your profile and activity through the Settings menu. Choose between Public, Connections Only, or Private visibility for your profile and posts.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <span>How do I edit my profile?</span>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Click on your profile picture in the top navigation and select "Edit Profile". From there you can update your personal information, add social links, and manage your privacy settings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Form Section -->
+                    <div class="help-section" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #EEEEEE;">
+                        <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #212121; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-envelope" style="color: #1d75e9;"></i> Contact & Feedback
+                        </h4>
+                        
+                        <form id="feedbackForm" style="display: flex; flex-direction: column; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label" for="feedbackType">Issue Type</label>
+                                <select id="feedbackType" class="form-input" required>
+                                    <option value="">Select an issue type...</option>
+                                    <option value="bug">Bug Report</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="account">Account Issue</option>
+                                    <option value="general">General Question</option>
+                                    <option value="feedback">Feedback</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="feedbackSubject">Subject</label>
+                                <input type="text" id="feedbackSubject" class="form-input" placeholder="Brief description of your issue" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="feedbackMessage">Message</label>
+                                <textarea id="feedbackMessage" class="form-input" rows="5" placeholder="Please provide detailed information about your issue or feedback..." required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="feedbackEmail">Email (optional)</label>
+                                <input type="email" id="feedbackEmail" class="form-input" placeholder="your.email@example.com">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="align-self: flex-start;">
+                                <i class="fas fa-paper-plane"></i> Send Feedback
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="help-footer" style="padding: 20px 30px; border-top: 1px solid #EEEEEE; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 13px; color: #757575;">
+                        <i class="fas fa-info-circle"></i> We typically respond within 24-48 hours
+                    </div>
+                    <button class="btn btn-secondary" id="closeHelpBtn">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden containers that JavaScript needs -->
+        <div id="solutionModal" class="modal" style="display: none;"></div>
+        <button class="fab" id="fabButton" style="display: none;">
+            <i class="fas fa-plus"></i>
+        </button>
         
-        <!-- Dashboard -->
-        <section class="dashboard">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-fire"></i> Trending Solutions</h3>
-                </div>
-                <div class="trending-list">
-                    <div class="trending-item">
-                        <div class="trending-rank">1</div>
-                        <div class="trending-content">
-                            <div class="trending-text">Use renewable energy sources like solar panels</div>
-                            <div class="trending-meta">
-                                <span class="votes">142 votes</span>
-                                <span class="author">Energy Expert</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-bolt"></i> Live Activity</h3>
-                </div>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-text">
-                                <strong>Welcome!</strong> Start solving problems
-                            </div>
-                            <div class="activity-time">Just now</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="toast-container" id="toastContainer"></div>
     </div>
     
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script src="app.js"></script>
+    <!-- Floating Post Button -->
+    <div class="floating-post-btn" id="floatingPostBtn" title="Post a Problem">
+        <i class="fas fa-plus"></i>
+        <span class="floating-text">Post Problem</span>
+    </div>
+    
+    <!-- Enhanced Post Composer Modal -->
+    <div class="post-composer-modal" id="postComposerModal">
+        <div class="composer-overlay"></div>
+        <div class="composer-container">
+            <div class="composer-header">
+                <h3>Share Your Problem</h3>
+                <button class="composer-close" id="closeComposer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="composer-body">
+                <div class="composer-user">
+                    <img src="https://images.unsplash.com/photo-1512485694743-9c9538b4e6e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="You">
+                    <div class="user-info">
+                        <span class="user-name">Alex Thompson</span>
+                        <span class="user-role">Software Developer</span>
+                    </div>
+                </div>
+                
+                <div class="composer-content">
+                    <textarea placeholder="What problem are you facing today? Be specific and detailed..." id="composerTextarea" rows="4"></textarea>
+                    
+                    <!-- Emoji Picker -->
+                    <div class="emoji-picker-container">
+                        <button class="emoji-btn" id="emojiBtn" title="Add emoji">
+                            <i class="fas fa-smile"></i>
+                        </button>
+                        <div class="emoji-picker" id="emojiPicker">
+                            <div class="emoji-category">
+                                <span class="emoji-category-title">Feelings</span>
+                                <div class="emoji-grid">
+                                    <span class="emoji-item">😊</span>
+                                    <span class="emoji-item">😔</span>
+                                    <span class="emoji-item">😡</span>
+                                    <span class="emoji-item">😰</span>
+                                    <span class="emoji-item">🤔</span>
+                                    <span class="emoji-item">😴</span>
+                                    <span class="emoji-item">🤗</span>
+                                    <span class="emoji-item">😤</span>
+                                    <span class="emoji-item">😍</span>
+                                    <span class="emoji-item">🤯</span>
+                                    <span class="emoji-item">😇</span>
+                                    <span class="emoji-item">🥳</span>
+                                </div>
+                            </div>
+                            <div class="emoji-category">
+                                <span class="emoji-category-title">Situations</span>
+                                <div class="emoji-grid">
+                                    <span class="emoji-item">💼</span>
+                                    <span class="emoji-item">🎨</span>
+                                    <span class="emoji-item">🏠</span>
+                                    <span class="emoji-item">📚</span>
+                                    <span class="emoji-item">💻</span>
+                                    <span class="emoji-item">🚗</span>
+                                    <span class="emoji-item">💰</span>
+                                    <span class="emoji-item">🏥</span>
+                                    <span class="emoji-item">🎯</span>
+                                    <span class="emoji-item">⚡</span>
+                                    <span class="emoji-item">🔥</span>
+                                    <span class="emoji-item">💎</span>
+                                </div>
+                            </div>
+                            <div class="emoji-category">
+                                <span class="emoji-category-title">Activities</span>
+                                <div class="emoji-grid">
+                                    <span class="emoji-item">🏃‍♂️</span>
+                                    <span class="emoji-item">🧘‍♀️</span>
+                                    <span class="emoji-item">🎮</span>
+                                    <span class="emoji-item">🎵</span>
+                                    <span class="emoji-item">📸</span>
+                                    <span class="emoji-item">🍳</span>
+                                    <span class="emoji-item">🛠️</span>
+                                    <span class="emoji-item">🚴‍♀️</span>
+                                </div>
+                            </div>
+                            <div class="emoji-category">
+                                <span class="emoji-category-title">Nature</span>
+                                <div class="emoji-grid">
+                                    <span class="emoji-item">🌟</span>
+                                    <span class="emoji-item">🌈</span>
+                                    <span class="emoji-item">🌺</span>
+                                    <span class="emoji-item">🌳</span>
+                                    <span class="emoji-item">🦋</span>
+                                    <span class="emoji-item">🐶</span>
+                                    <span class="emoji-item">☕</span>
+                                    <span class="emoji-item">🌍</span>
+                                </div>
+                            </div>
+                            <div class="emoji-category">
+                                <span class="emoji-category-title">Communication</span>
+                                <div class="emoji-grid">
+                                    <span class="emoji-item">💬</span>
+                                    <span class="emoji-item">📞</span>
+                                    <span class="emoji-item">📧</span>
+                                    <span class="emoji-item">📱</span>
+                                    <span class="emoji-item">👍</span>
+                                    <span class="emoji-item">🙏</span>
+                                    <span class="emoji-item">💡</span>
+                                    <span class="emoji-item">🚨</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tags Section -->
+                    <div class="tags-section">
+                        <div class="tags-header">
+                            <h4>Category Tags</h4>
+                            <span class="tags-subtitle">Select relevant tags for your problem</span>
+                        </div>
+                        <div class="tags-grid">
+                            <button class="tag-item" data-tag="business">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Business</span>
+                            </button>
+                            <button class="tag-item" data-tag="creative">
+                                <i class="fas fa-palette"></i>
+                                <span>Creative</span>
+                            </button>
+                            <button class="tag-item" data-tag="life">
+                                <i class="fas fa-heart"></i>
+                                <span>Life</span>
+                            </button>
+                            <button class="tag-item" data-tag="tech">
+                                <i class="fas fa-laptop-code"></i>
+                                <span>Tech</span>
+                            </button>
+                            <button class="tag-item" data-tag="health">
+                                <i class="fas fa-heartbeat"></i>
+                                <span>Health</span>
+                            </button>
+                            <button class="tag-item" data-tag="education">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Education</span>
+                            </button>
+                            <button class="tag-item" data-tag="finance">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Finance</span>
+                            </button>
+                            <button class="tag-item" data-tag="relationship">
+                                <i class="fas fa-users"></i>
+                                <span>Relationship</span>
+                            </button>
+                            <button class="tag-item" data-tag="career">
+                                <i class="fas fa-rocket"></i>
+                                <span>Career</span>
+                            </button>
+                            <button class="tag-item" data-tag="other">
+                                <i class="fas fa-ellipsis-h"></i>
+                                <span>Other</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Media Upload -->
+                    <div class="media-section">
+                        <div class="media-header">
+                            <h4 style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 16px; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-camera"></i> Add Media
+                            </h4>
+                            <p style="margin: 0 0 16px 0; color: #6b7280; font-size: 14px;">Capture or upload photos/videos to show your problem</p>
+                        </div>
+                        
+                        <div class="media-options" style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                            <button class="media-option-btn" id="uploadMediaBtn" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3); font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-upload"></i> Upload File
+                            </button>
+                            <button class="media-option-btn" id="capturePhotoBtn" style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(79, 172, 254, 0.3); font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-camera"></i> Capture Photo
+                            </button>
+                            <button class="media-option-btn" id="recordVideoBtn" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(240, 147, 251, 0.3); font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-video"></i> Record Video
+                            </button>
+                        </div>
+                        
+                        <div class="media-preview" id="mediaPreview" style="display: flex; flex-wrap: wrap; gap: 12px; min-height: 100px; padding: 16px; background: linear-gradient(135deg, #f8f9ff, #e8f0ff); border-radius: 12px; border: 2px dashed rgba(102, 126, 234, 0.2);"></div>
+                        
+                        <!-- Hidden Inputs -->
+                        <input type="file" id="mediaInput" accept="image/*,video/*" multiple style="display: none;">
+                        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display: none;">
+                        <input type="file" id="videoInput" accept="video/*" capture="environment" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="composer-footer">
+                <div class="composer-options">
+                    <button class="option-btn" id="anonymousBtn">
+                        <i class="fas fa-user-secret"></i>
+                        <span>Anonymous</span>
+                    </button>
+                    <button class="option-btn" id="priorityBtn">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Urgent</span>
+                    </button>
+                </div>
+                <div class="composer-actions">
+                    <button class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button class="btn-primary" id="postBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Post Problem
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
